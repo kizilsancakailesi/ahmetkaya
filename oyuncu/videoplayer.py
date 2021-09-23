@@ -10,7 +10,7 @@ group_call_factory = GroupCallFactory(app, GroupCallFactory.MTPROTO_CLIENT_TYPE.
 VIDEO_CALL = {}
 
 
-@Client.on_message(filters.command("stream"))
+@Client.on_message(filters.command("vizyon"))
 async def stream(client, m: Message):
     replied = m.reply_to_message
     if not replied:
@@ -18,7 +18,7 @@ async def stream(client, m: Message):
             await m.reply("`Reply to some Video or Give Some Live Stream Url!`")
         else:
             livelink = m.text.split(None, 1)[1]
-            msg = await m.reply("`Starting Live Stream...`")
+            msg = await m.reply("`Canlı Akış başlatılıyor...`")
             chat_id = m.chat.id
             await asyncio.sleep(1)
             try:
@@ -26,11 +26,11 @@ async def stream(client, m: Message):
                 await group_call.join(chat_id)
                 await group_call.start_video(livelink, enable_experimental_lip_sync=True)
                 VIDEO_CALL[chat_id] = group_call
-                await msg.edit(f"**▶️ Started [Live Streaming](livelink) !**")
+                await msg.edit(f"**▶️ [Canlı Akış](canlı bağlantı) başlatıldı !**")
             except Exception as e:
-                await msg.edit(f"**Error** -- `{e}`")
+                await msg.edit(f"**Hata** -- `{e}`")
     elif replied.video or replied.document:
-        msg = await m.reply("`Downloading...`")
+        msg = await m.reply("`indiriliyor...`")
         video = await client.download_media(m.reply_to_message)
         chat_id = m.chat.id
         await asyncio.sleep(2)
@@ -39,17 +39,17 @@ async def stream(client, m: Message):
             await group_call.join(chat_id)
             await group_call.start_video(video)
             VIDEO_CALL[chat_id] = group_call
-            await msg.edit("**▶️ Started Streaming!**")
+            await msg.edit("**▶️ Akış Başlatıldı!**")
         except Exception as e:
-            await msg.edit(f"**Error** -- `{e}`")
+            await msg.edit(f"**Hata** -- `{e}`")
     else:
-        await m.reply("`Reply to some Video!`")
+        await m.reply("`Bazı Videoları Yanıtlayın!`")
 
-@Client.on_message(filters.command("stopstream"))
+@Client.on_message(filters.command("Durdur"))
 async def stopvideo(client, m: Message):
     chat_id = m.chat.id
     try:
         await VIDEO_CALL[chat_id].stop()
-        await m.reply("**⏹️ Stopped Streaming!**")
+        await m.reply("**⏹️ CANLI AKIŞ DURDURULDU!**")
     except Exception as e:
-        await m.reply(f"**🚫 Error** - `{e}`")
+        await m.reply(f"**🚫 HATA** - `{e}`")
