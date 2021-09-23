@@ -45,7 +45,7 @@ async def stream(client, m: Message):
     else:
         await m.reply("`Bazı Videoları Yanıtlayın!`")
 
-@Client.on_message(filters.command("Durdur"))
+@Client.on_message(filters.command("durvizyon"))
 async def stopvideo(client, m: Message):
     chat_id = m.chat.id
     try:
